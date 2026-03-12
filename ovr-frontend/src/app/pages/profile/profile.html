@@ -1,0 +1,104 @@
+<!-- LOADING -->
+@if (isLoading()) {
+  <div class="min-h-screen bg-gray-900 flex items-center justify-center">
+    <p class="text-white text-xl animate-pulse">Chargement du profil...</p>
+  </div>
+}
+
+<!-- ERREUR -->
+@if (error()) {
+  <div class="min-h-screen bg-gray-900 flex items-center justify-center">
+    <p class="text-red-400 text-xl">{{ error() }}</p>
+  </div>
+}
+
+<!-- CONTENU PRINCIPAL -->
+@if (!isLoading() && !error()) {
+  <div class="min-h-screen bg-gray-900 text-white p-8">
+    <div class="max-w-6xl mx-auto flex gap-10 items-start">
+
+      <!-- ===== OVR CARD (style FUT) ===== -->
+      <div class="flex-shrink-0 sticky top-8">
+        <div [class]="'ovr-card bg-gradient-to-b ' + getRatingBg(avgOverall())">
+
+          <div class="ovr-card__top">
+            <span class="text-6xl font-black leading-none">{{ avgOverall() }}</span>
+            <div class="flex flex-col text-xs font-bold uppercase tracking-widest opacity-75">
+              <span>OVR</span>
+              <span>Saison</span>
+            </div>
+          </div>
+
+          <div class="ovr-card__emblem">⚔️</div>
+
+          <div class="ovr-card__stats">
+            <div class="ovr-stat">
+              <span class="ovr-stat__val">{{ avgMechanics() }}</span>
+              <span class="ovr-stat__lbl">MEC</span>
+            </div>
+            <div class="ovr-stat">
+              <span class="ovr-stat__val">{{ avgFarming() }}</span>
+              <span class="ovr-stat__lbl">FAR</span>
+            </div>
+            <div class="ovr-stat">
+              <span class="ovr-stat__val">{{ avgVision() }}</span>
+              <span class="ovr-stat__lbl">VIS</span>
+            </div>
+          </div>
+
+          <div class="ovr-card__footer">
+            {{ history().length }} matchs analysés
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== HISTORIQUE ===== -->
+      <div class="flex-1">
+        <h2 class="text-2xl font-bold mb-6">Historique des parties</h2>
+
+        @if (history().length === 0) {
+          <p class="text-gray-500">Aucune partie analysée pour l'instant.</p>
+        }
+
+        <div class="flex flex-col gap-3">
+          @for (card of history(); track card.matchId) {
+            <div [class]="'match-row border-l-4 ' + getMatchBorder(card.overallRating)">
+
+              <!-- Note globale -->
+              <div [class]="'match-row__ovr font-black text-3xl ' + getRatingColor(card.overallRating)">
+                {{ card.overallRating }}
+              </div>
+
+              <!-- Séparateur -->
+              <div class="w-px bg-gray-600 self-stretch"></div>
+
+              <!-- Match ID -->
+              <div class="flex flex-col justify-center min-w-0 flex-1">
+                <span class="text-xs text-gray-500 uppercase tracking-wide">Match ID</span>
+                <span class="text-sm font-mono text-gray-300 truncate">{{ card.matchId }}</span>
+              </div>
+
+              <!-- Stats -->
+              <div class="flex gap-6">
+                <div class="mini-stat">
+                  <span class="mini-stat__val">{{ card.mechanicsScore }}</span>
+                  <span class="mini-stat__lbl">MEC</span>
+                </div>
+                <div class="mini-stat">
+                  <span class="mini-stat__val">{{ card.farmingScore }}</span>
+                  <span class="mini-stat__lbl">FAR</span>
+                </div>
+                <div class="mini-stat">
+                  <span class="mini-stat__val">{{ card.visionScore }}</span>
+                  <span class="mini-stat__lbl">VIS</span>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+}

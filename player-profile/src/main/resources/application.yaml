@@ -1,0 +1,40 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: player-profile
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ovr_db
+    username: ovr_user
+    password: ovr_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # On force le dialecte pour éviter qu'Hibernate ne panique
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # --- CONFIGURATION KAFKA CONSUMER ---
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: player-profile-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: lol.ovr.player_profile.infrastructure.adapter.in.kafka.KafkaOvrCardConsumer$OvrCardEventPayload
+
+ovr:
+  kafka:
+    topic:
+      card-generated: ovr.card.generated.v1

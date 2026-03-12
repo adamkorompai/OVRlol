@@ -1,0 +1,40 @@
+<div class="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white p-4 font-sans">
+  
+  <h1 class="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4 tracking-tighter">
+    OVR.lol
+  </h1>
+  <p class="text-gray-400 text-xl mb-12 font-medium">Le tracker de performance League of Legends nouvelle génération</p>
+
+  <div class="bg-gray-800 p-8 rounded-3xl shadow-2xl border border-gray-700 w-full max-w-lg">
+    <div class="flex flex-col gap-6">
+      
+      <div>
+        <label class="text-xs text-gray-400 font-bold uppercase tracking-widest ml-1">Rechercher un joueur (Riot ID)</label>
+        
+        <div class="flex mt-2 bg-gray-950 rounded-xl overflow-hidden border border-gray-700 focus-within:border-emerald-400 transition-colors shadow-inner">
+          <input type="text" [(ngModel)]="gameName" placeholder="Ex: Faker" 
+                 class="w-full bg-transparent text-white p-4 text-lg outline-none placeholder-gray-600 font-semibold">
+          
+          <div class="flex items-center px-4 bg-gray-900 border-l border-r border-gray-700 text-gray-500 font-black text-xl">
+            #
+          </div>
+          
+          <input type="text" [(ngModel)]="tagLine" placeholder="KR1" 
+                 class="w-32 bg-transparent text-white p-4 text-lg outline-none placeholder-gray-600 font-semibold uppercase">
+        </div>
+      </div>
+
+      @if (errorMessage()) {
+        <p class="text-red-400 text-sm font-semibold bg-red-400/10 p-3 rounded-lg border border-red-400/20">
+          ⚠️ {{ errorMessage() }}
+        </p>
+      }
+
+      <button (click)="searchPlayer()" [disabled]="isLoading() || !gameName || !tagLine"
+              class="mt-2 w-full bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-400 hover:to-emerald-400 text-white font-black text-lg py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ isLoading() ? 'Recherche dans la base Riot...' : 'Analyser le profil' }}
+      </button>
+
+    </div>
+  </div>
+</div>

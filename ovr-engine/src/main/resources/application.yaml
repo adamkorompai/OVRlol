@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ovr-engine
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ovr-engine-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: lol.ovr.ovr_engine.infrastructure.adapter.in.kafka.KafkaMatchCompletedConsumer$MatchCompletedEventPayload
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+ovr:
+  kafka:
+    topic:
+      match-completed: ovr.match.completed.v1
+      card-generated: ovr.card.generated.v1
