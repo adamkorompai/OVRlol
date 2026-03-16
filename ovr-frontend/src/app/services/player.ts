@@ -11,6 +11,18 @@ export interface PlayerCard {
   farmingScore: number;
   visionScore: number;
   gameCreation: number;
+
+  championName: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  creepScore: number;
+  win: boolean;
+  gameDuration: number;
+  itemIds: number[];
+  primaryRuneIds: number[];
+  secondaryRuneIds: number[];
+  enemyChampions: string[];
 }
 
 @Injectable({
@@ -26,28 +38,22 @@ export class Player {
   }
 
   private stompClient!: Client;
-  // Ce "Subject" est un haut-parleur interne à Angular. 
-  // Quand une carte arrive du WebSocket, on crie l'info dans toute l'app !
   public newCard$ = new Subject<PlayerCard>();
 
-  // 1. L'appel classique (Historique)
   getHistory(puuid: string): Observable<PlayerCard[]> {
     return this.http.get<PlayerCard[]>(`${this.apiUrl}/${puuid}/cards`);
   }
 
-  // 2. LA MAGIE : La connexion Temps Réel
   connectToRealTime(puuid: string) {
     this.stompClient = new Client({
-      brokerURL: 'ws://localhost:8082/ws-ovr', // L'URL de notre Spring Boot
+      brokerURL: 'ws://localhost:8082/ws-ovr',
       onConnect: () => {
         console.log('⚡ Connecté au serveur WebSocket avec succès !');
         
-        // On s'abonne UNIQUEMENT au canal de ce joueur précis
         this.stompClient.subscribe(`/topic/cards/${puuid}`, (message: Message) => {
           const newCard: PlayerCard = JSON.parse(message.body);
           console.log('🎁 NOUVELLE CARTE REÇUE EN DIRECT !', newCard);
           
-          // On transmet la carte à notre composant visuel
           this.newCard$.next(newCard); 
         });
       },
@@ -55,7 +61,7 @@ export class Player {
       onStompError: (frame) => console.error('❌ Erreur STOMP', frame)
     });
     
-    this.stompClient.activate(); // Allume le tuyau !
+    this.stompClient.activate();
   }
 
   triggerRecentIngestion(puuid: string, count: number = 20): Observable<void> {

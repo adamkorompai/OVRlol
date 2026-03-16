@@ -12,16 +12,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // C'est l'URL sur laquelle notre Angular va venir se brancher
         registry.addEndpoint("/ws-ovr")
-                .setAllowedOriginPatterns("*"); // Évite les erreurs CORS
+                .setAllowedOriginPatterns("*");
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // Le préfixe pour les messages qu'on envoie au Frontend
         registry.enableSimpleBroker("/topic");
-        // Le préfixe si le Frontend voulait nous envoyer des messages (pas utilisé pour l'instant)
         registry.setApplicationDestinationPrefixes("/app");
     }
 }

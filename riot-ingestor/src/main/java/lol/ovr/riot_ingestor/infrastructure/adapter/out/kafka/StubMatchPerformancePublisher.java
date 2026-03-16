@@ -6,12 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component // Spring détecte cette classe et l'injectera dans DomainConfig
+@Component
 public class StubMatchPerformancePublisher implements MatchPerformancePublisher {
 
     @Override
     public void publish(PlayerMatchPerformance performance) {
         log.info("[STUB KAFKA] Événement prêt à être publié sur le topic : {}", performance);
-        // Plus tard, on utilisera KafkaTemplate ici
     }
 }

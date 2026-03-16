@@ -19,12 +19,13 @@ public class JpaPlayerCardAdapter implements PlayerCardPort {
 
     private final PlayerCardRepository repository;
 
+    private static <T> List<T> safe(List<T> v) {
+        return v == null ? List.of() : v;
+    }
+
     @Override
     public void save(PlayerCard card) {
-        if (repository.existsByPuuidAndMatchId(card.puuid(), card.matchId())) {
-            log.info("[POSTGRESQL] Carte déjà existante pour matchId: {}, on skip.", card.matchId());
-            return;
-        }
+        if (repository.existsByPuuidAndMatchId(card.puuid(), card.matchId())) return;
 
         PlayerCardEntity entity = PlayerCardEntity.builder()
                 .puuid(card.puuid())
@@ -34,24 +35,45 @@ public class JpaPlayerCardAdapter implements PlayerCardPort {
                 .farmingScore(card.farmingScore())
                 .visionScore(card.visionScore())
                 .gameCreation(card.gameCreation())
+                .championName(card.championName())
+                .kills(card.kills())
+                .deaths(card.deaths())
+                .assists(card.assists())
+                .creepScore(card.creepScore())
+                .win(card.win())
+                .gameDuration(card.gameDuration())
+                .itemIds(safe(card.itemIds()))
+                .primaryRuneIds(safe(card.primaryRuneIds()))
+                .secondaryRuneIds(safe(card.secondaryRuneIds()))
+                .enemyChampions(safe(card.enemyChampions()))
                 .build();
 
-        PlayerCardEntity savedEntity = repository.save(entity);
-        log.info("[POSTGRESQL] Carte OVR sauvegardée avec succès en base de données avec l'ID : {}", savedEntity.getId());
+        repository.save(entity);
     }
 
     @Override
     public List<PlayerCard> findByPuuid(String puuid) {
         return repository.findByPuuidOrderByGameCreationDesc(puuid).stream()
-                .map(entity -> new PlayerCard(
-                        entity.getPuuid(),
-                        entity.getMatchId(),
-                        entity.getOverallRating(),
-                        entity.getMechanicsScore(),
-                        entity.getFarmingScore(),
-                        entity.getVisionScore(),
-                        entity.getGameCreation()
+                .map(e -> new PlayerCard(
+                        e.getPuuid(),
+                        e.getMatchId(),
+                        e.getOverallRating(),
+                        e.getMechanicsScore(),
+                        e.getFarmingScore(),
+                        e.getVisionScore(),
+                        e.getGameCreation(),
+                        e.getChampionName(),
+                        e.getKills(),
+                        e.getDeaths(),
+                        e.getAssists(),
+                        e.getCreepScore(),
+                        e.isWin(),
+                        e.getGameDuration(),
+                        e.getItemIds(),
+                        e.getPrimaryRuneIds(),
+                        e.getSecondaryRuneIds(),
+                        e.getEnemyChampions()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

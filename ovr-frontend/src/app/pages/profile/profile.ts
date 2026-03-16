@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Player, PlayerCard } from '../../services/player';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval, switchMap } from 'rxjs';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -30,7 +31,6 @@ export class Profile implements OnInit {
     return Math.round(values.reduce((a, b) => a + b, 0) / values.length);
   }
 
-  // 🎨 Gradient de la carte selon la note (style FUT tiers)
   getRatingBg(rating: number): string {
     if (rating >= 90) return 'from-yellow-400 via-amber-500 to-yellow-600';
     if (rating >= 80) return 'from-yellow-500 via-yellow-600 to-amber-700';
@@ -38,7 +38,6 @@ export class Profile implements OnInit {
     return 'from-amber-700 via-amber-800 to-amber-900';
   }
 
-  // 🎨 Couleur du texte de la note dans l'historique
   getRatingColor(rating: number): string {
     if (rating >= 90) return 'text-yellow-400';
     if (rating >= 80) return 'text-yellow-500';
@@ -46,13 +45,38 @@ export class Profile implements OnInit {
     return 'text-amber-700';
   }
 
-  // 🎨 Couleur de la bordure gauche de chaque match
   getMatchBorder(rating: number): string {
     if (rating >= 90) return 'border-yellow-400';
     if (rating >= 80) return 'border-yellow-500';
     if (rating >= 70) return 'border-gray-400';
     return 'border-amber-700';
   }
+
+  readonly ddragonVersion = '15.6.1';
+
+  championImg(championName: string): string {
+    return `https://ddragon.leagueoflegends.com/cdn/${this.ddragonVersion}/img/champion/${championName}.png`;
+  }
+
+  itemImg(itemId: number): string {
+    return `https://ddragon.leagueoflegends.com/cdn/${this.ddragonVersion}/img/item/${itemId}.png`;
+  }
+
+  formatDuration(totalSeconds: number): string {
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  kda(card: PlayerCard): number {
+    return (card.kills + card.assists) / Math.max(1, card.deaths);
+  }
+
+  winRate = computed(() => {
+    const h = this.history();
+    if (!h.length) return 0;
+    return Math.round((h.filter(c => c.win).length / h.length) * 100);
+  });
 
   ngOnInit(): void {
     this.route.paramMap

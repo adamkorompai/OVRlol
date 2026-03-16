@@ -6,13 +6,12 @@ spring:
     name: player-profile
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/ovr_db
-    username: ovr_user
-    password: ovr_password
+    url: jdbc:postgresql://localhost:5433/${POSTGRES_DB:ovr_db}
+    username: ${POSTGRES_USER:ovr_user}
+    password: ${POSTGRES_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    # On force le dialecte pour éviter qu'Hibernate ne panique
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
@@ -21,7 +20,6 @@ spring:
       hibernate:
         format_sql: true
 
-  # --- CONFIGURATION KAFKA CONSUMER ---
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

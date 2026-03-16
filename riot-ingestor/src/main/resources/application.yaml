@@ -4,12 +4,9 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      # La clé sera un String (le matchId)
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      # La valeur sera notre objet converti en JSON automatiquement par Spring
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-# Variables personnalisées pour notre application
 ovr:
   kafka:
     topic:
@@ -17,8 +14,6 @@ ovr:
 
 riot:
   api:
-    # Récupère une clé (Development API Key) sur https://developer.riotgames.com/
     key: ${RIOT_API_KEY}
-    # Base URL pour l'Europe (Match-V5 API)
     base-url: https://europe.api.riotgames.com
     url-euw: "https://euw1.api.riotgames.com"

@@ -6,15 +6,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record RiotParticipantDto(
         String puuid,
         String championName,
+        int teamId,
+        String teamPosition,
         int kills,
         int deaths,
         int assists,
         int totalMinionsKilled,
         int neutralMinionsKilled,
         int visionScore,
-        boolean win
+        boolean win,
+        int item0,
+        int item1,
+        int item2,
+        int item3,
+        int item4,
+        int item5,
+        int item6,
+        RiotPerksDto perks
 ) {
-    // Petit helper pour calculer le farm total (lane + jungle)
     public int getTotalCs() {
         return totalMinionsKilled + neutralMinionsKilled;
     }

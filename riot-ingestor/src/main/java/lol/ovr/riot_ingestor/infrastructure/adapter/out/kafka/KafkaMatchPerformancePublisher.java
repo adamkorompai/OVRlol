@@ -11,24 +11,23 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Primary // Crucial : Dit à Spring d'utiliser ce bean plutôt que le Stub
+@Primary
 @RequiredArgsConstructor
 public class KafkaMatchPerformancePublisher implements MatchPerformancePublisher {
 
-    // L'outil magique de Spring Boot pour parler à Kafka
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    // On récupère le nom du topic depuis l'application.yml
     @Value("${ovr.kafka.topic.match-completed}")
     private String topicName;
 
     @Override
     public void publish(PlayerMatchPerformance performance) {
         log.info("[KAFKA ADAPTER] Publication de la performance sur le topic : {}", topicName);
-
-        // On envoie le message.
-        // Clé = matchId (garantit que les events d'un même match vont sur la même partition)
-        // Valeur = l'objet métier (qui sera sérialisé en JSON)
+        log.info("[INGESTOR->KAFKA] matchId={} itemIds={} primaryRunes={} secondaryRunes={}",
+                performance.matchId(),
+                performance.itemsIds(),
+                performance.primaryRuneIds(),
+                performance.secondaryRuneIds());
         kafkaTemplate.send(topicName, performance.matchId(), performance);
     }
 }

@@ -4,6 +4,7 @@ import lol.ovr.riot_ingestor.domain.model.PlayerMatchPerformance;
 import lol.ovr.riot_ingestor.domain.port.out.RiotMatchProvider;
 import lol.ovr.riot_ingestor.infrastructure.adapter.in.web.dto.RiotMatchDto;
 import lol.ovr.riot_ingestor.infrastructure.adapter.in.web.dto.RiotParticipantDto;
+import lol.ovr.riot_ingestor.infrastructure.adapter.out.riot.mapper.RiotMatchPerformanceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -18,15 +19,18 @@ import java.util.List;
 public class HttpRiotMatchProvider implements RiotMatchProvider {
 
     private final RestClient restClient;
+    private final RiotMatchPerformanceMapper mapper;
 
     public HttpRiotMatchProvider(
             RestClient.Builder restClientBuilder,
             @Value("${riot.api.key}") String apiKey,
-            @Value("${riot.api.base-url}") String baseUrl) {
+            @Value("${riot.api.base-url}") String baseUrl,
+            RiotMatchPerformanceMapper mapper) {
 
+        this.mapper = mapper;
         this.restClient = restClientBuilder
                 .baseUrl(baseUrl)
-                .defaultHeader("X-Riot-Token", apiKey) // Authentification Riot
+            .defaultHeader("X-Riot-Token", apiKey)
                 .build();
     }
 
@@ -34,32 +38,16 @@ public class HttpRiotMatchProvider implements RiotMatchProvider {
     public PlayerMatchPerformance fetchMatchPerformance(String matchId, String puuid) {
         log.info("[RIOT API] Récupération du match {} pour le joueur {}", matchId, puuid);
 
-        RiotMatchDto matchDto = restClient.get()
+        RiotMatchDto match = restClient.get()
                 .uri("/lol/match/v5/matches/{matchId}", matchId)
                 .retrieve()
                 .body(RiotMatchDto.class);
 
-        if (matchDto == null || matchDto.info() == null) {
-            throw new IllegalArgumentException("Match introuvable ou vide chez Riot");
+        if (match == null || match.info() == null || match.info().participants() == null) {
+            throw new IllegalStateException("Invalid Riot API response for matchId=" + matchId);
         }
 
-        RiotParticipantDto participant = matchDto.info().participants().stream()
-                .filter(p -> p.puuid().equals(puuid))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Joueur non trouvé dans ce match"));
-
-        return new PlayerMatchPerformance(
-                matchId,
-                puuid,
-                participant.championName(),
-                participant.kills(),
-                participant.deaths(),
-                participant.assists(),
-                participant.getTotalCs(),
-                participant.visionScore(),
-                participant.win(),
-                matchDto.info().gameCreation()
-        );
+        return mapper.toDomain(matchId, puuid, match);
     }
 
     @Override

@@ -1,16 +1,10 @@
 package lol.ovr.player_profile.infrastructure.adapter.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import java.util.List;
+import lombok.*;
+import lol.ovr.player_profile.infrastructure.adapter.out.persistence.converter.IntegerListJsonConverter;
+import lol.ovr.player_profile.infrastructure.adapter.out.persistence.converter.StringListJsonConverter;
 
 @Entity
 @Table(name = "player_cards")
@@ -38,4 +32,30 @@ public class PlayerCardEntity {
 
     @Column(nullable = false)
     private long gameCreation;
+
+    @Column(nullable = false)
+    private String championName;
+
+    private int kills;
+    private int deaths;
+    private int assists;
+    private int creepScore;
+    private boolean win;
+    private long gameDuration;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @Convert(converter = IntegerListJsonConverter.class)
+    private List<Integer> itemIds;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @Convert(converter = IntegerListJsonConverter.class)
+    private List<Integer> primaryRuneIds;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @Convert(converter = IntegerListJsonConverter.class)
+    private List<Integer> secondaryRuneIds;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @Convert(converter = StringListJsonConverter.class)
+    private List<String> enemyChampions;
 }
