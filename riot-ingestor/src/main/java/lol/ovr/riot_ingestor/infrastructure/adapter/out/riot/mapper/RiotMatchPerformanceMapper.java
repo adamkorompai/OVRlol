@@ -1,11 +1,14 @@
 package lol.ovr.riot_ingestor.infrastructure.adapter.out.riot.mapper;
 
 import java.util.List;
-import java.util.stream.Stream;
-
 import org.springframework.stereotype.Component;
 
+import lol.ovr.riot_ingestor.domain.model.ItemSlots;
+import lol.ovr.riot_ingestor.domain.model.KdaStats;
+import lol.ovr.riot_ingestor.domain.model.MatchContext;
 import lol.ovr.riot_ingestor.domain.model.PlayerMatchPerformance;
+import lol.ovr.riot_ingestor.domain.model.RuneSetup;
+import lol.ovr.riot_ingestor.domain.model.SummonerSpells;
 import lol.ovr.riot_ingestor.infrastructure.adapter.in.web.dto.RiotInfoDto;
 import lol.ovr.riot_ingestor.infrastructure.adapter.in.web.dto.RiotMatchDto;
 import lol.ovr.riot_ingestor.infrastructure.adapter.in.web.dto.RiotParticipantDto;
@@ -23,7 +26,6 @@ public class RiotMatchPerformanceMapper {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Participant not found for puuid=" + puuid));
 
-        List<Integer> itemIds = extractItemIds(me);
         List<Integer> primaryRuneIds = extractRuneIds(me.perks(), "primaryStyle");
         List<Integer> secondaryRuneIds = extractRuneIds(me.perks(), "subStyle");
 
@@ -32,29 +34,33 @@ public class RiotMatchPerformanceMapper {
                 .map(RiotParticipantDto::championName)
                 .toList();
 
+        KdaStats kda = new KdaStats(me.kills(), me.deaths(), me.assists());
+        MatchContext context = new MatchContext(me.win(), info.gameCreation(), info.gameDuration(), info.queueId());
+        SummonerSpells summonerSpells = new SummonerSpells(me.summoner1Id(), me.summoner2Id());
+        ItemSlots items = new ItemSlots(
+                me.item0(),
+                me.item1(),
+                me.item2(),
+                me.item3(),
+                me.item4(),
+                me.item5(),
+                me.item6()
+        );
+        RuneSetup runes = new RuneSetup(primaryRuneIds, secondaryRuneIds);
+
         return new PlayerMatchPerformance(
                 matchId,
                 puuid,
                 me.championName(),
-                me.kills(),
-                me.deaths(),
-                me.assists(),
                 me.getTotalCs(),
                 me.visionScore(),
-                me.win(),
-                info.gameCreation(),
-                info.gameDuration(),
-                itemIds,
-                primaryRuneIds,
-                secondaryRuneIds,
+                kda,
+                context,
+                summonerSpells,
+                items,
+                runes,
                 enemyChampions
         );
-    }
-
-    private List<Integer> extractItemIds(RiotParticipantDto p) {
-        return Stream.of(p.item0(), p.item1(), p.item2(), p.item3(), p.item4(), p.item5(), p.item6())
-                .filter(id -> id > 0)
-                .toList();
     }
 
     private List<Integer> extractRuneIds(RiotPerksDto perks, String description) {

@@ -9,16 +9,25 @@ public record PlayerCard(
         int mechanicsScore,
         int farmingScore,
         int visionScore,
-        long gameCreation,
         String championName,
-        int kills,
-        int deaths,
-        int assists,
         int creepScore,
-        boolean win,
-        long gameDuration,
+        KdaStats kda,
+        MatchContext context,
+        SummonerSpells summonerSpells,
+        ItemSlots items,
         List<Integer> itemIds,
-        List<Integer> primaryRuneIds,
-        List<Integer> secondaryRuneIds,
+        RuneSetup runes,
         List<String> enemyChampions
-) {}
+) {
+        public PlayerCard {
+                if (puuid == null || puuid.isBlank()) throw new IllegalArgumentException("puuid cannot be empty");
+                if (matchId == null || matchId.isBlank()) throw new IllegalArgumentException("matchId cannot be empty");
+                if (kda == null) throw new IllegalArgumentException("kda cannot be null");
+                if (context == null) throw new IllegalArgumentException("context cannot be null");
+                if (summonerSpells == null) throw new IllegalArgumentException("summonerSpells cannot be null");
+                if (items == null) throw new IllegalArgumentException("items cannot be null");
+                if (runes == null) throw new IllegalArgumentException("runes cannot be null");
+                if (itemIds == null) itemIds = List.of();
+                if (enemyChampions == null) enemyChampions = List.of();
+        }
+}

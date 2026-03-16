@@ -1,10 +1,10 @@
-package lol.ovr.ovr_engine.domain.model;
+package lol.ovr.player_profile.infrastructure.adapter.in.web;
 
 import java.util.List;
 
-public record OvrCard(
-        String matchId,
+public record PlayerCardResponse(
         String puuid,
+        String matchId,
         int overallRating,
         int mechanicsScore,
         int farmingScore,
@@ -31,8 +31,4 @@ public record OvrCard(
         List<Integer> primaryRuneIds,
         List<Integer> secondaryRuneIds,
         List<String> enemyChampions
-) {
-    public OvrCard {
-        if (overallRating < 0 || overallRating > 99) throw new IllegalArgumentException("L'OVR doit être entre 0 et 99");
-    }
-}
+) {}

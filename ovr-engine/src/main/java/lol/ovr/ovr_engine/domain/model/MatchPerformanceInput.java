@@ -1,9 +1,8 @@
-package lol.ovr.riot_ingestor.domain.model;
-
+package lol.ovr.ovr_engine.domain.model;
 
 import java.util.List;
 
-public record PlayerMatchPerformance(
+public record MatchPerformanceInput(
         String matchId,
         String puuid,
         String championName,
@@ -11,12 +10,12 @@ public record PlayerMatchPerformance(
         int visionScore,
         KdaStats kda,
         MatchContext context,
-        SummonerSpells summonerSpells,
-        ItemSlots items,
+    SummonerSpells summonerSpells,
+    ItemSlots items,
         RuneSetup runes,
         List<String> enemyChampions
 ) {
-    public PlayerMatchPerformance {
+    public MatchPerformanceInput {
         if (matchId == null || matchId.isBlank()) throw new IllegalArgumentException("matchId cannot be empty");
         if (puuid == null || puuid.isBlank()) throw new IllegalArgumentException("puuid cannot be empty");
         if (kda == null) throw new IllegalArgumentException("kda cannot be null");
@@ -24,6 +23,6 @@ public record PlayerMatchPerformance(
         if (summonerSpells == null) throw new IllegalArgumentException("summonerSpells cannot be null");
         if (items == null) throw new IllegalArgumentException("items cannot be null");
         if (runes == null) throw new IllegalArgumentException("runes cannot be null");
-        if (kda.deaths() < 0) throw new IllegalArgumentException("deaths cannot be negative");
+        if (enemyChampions == null) enemyChampions = List.of();
     }
 }

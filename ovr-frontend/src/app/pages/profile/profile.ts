@@ -1,13 +1,13 @@
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Player, PlayerCard } from '../../services/player';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval, switchMap } from 'rxjs';
-import { DecimalPipe } from '@angular/common';
+import { MatchRecapRow } from './match-recap-row/match-recap-row';
 
 @Component({
   selector: 'app-profile',
-  imports: [DecimalPipe],
+  imports: [MatchRecapRow],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -50,26 +50,6 @@ export class Profile implements OnInit {
     if (rating >= 80) return 'border-yellow-500';
     if (rating >= 70) return 'border-gray-400';
     return 'border-amber-700';
-  }
-
-  readonly ddragonVersion = '15.6.1';
-
-  championImg(championName: string): string {
-    return `https://ddragon.leagueoflegends.com/cdn/${this.ddragonVersion}/img/champion/${championName}.png`;
-  }
-
-  itemImg(itemId: number): string {
-    return `https://ddragon.leagueoflegends.com/cdn/${this.ddragonVersion}/img/item/${itemId}.png`;
-  }
-
-  formatDuration(totalSeconds: number): string {
-    const m = Math.floor(totalSeconds / 60);
-    const s = totalSeconds % 60;
-    return `${m}:${String(s).padStart(2, '0')}`;
-  }
-
-  kda(card: PlayerCard): number {
-    return (card.kills + card.assists) / Math.max(1, card.deaths);
   }
 
   winRate = computed(() => {

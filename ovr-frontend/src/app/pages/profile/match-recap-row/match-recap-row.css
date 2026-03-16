@@ -1,0 +1,136 @@
+.match-recap {
+  display: grid;
+  grid-template-columns: 90px 130px 150px 1fr 64px;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid rgba(75, 85, 99, 0.6);
+  border-radius: 12px;
+  background: rgba(17, 24, 39, 0.72);
+}
+
+.match-recap--win {
+  box-shadow: inset 4px 0 0 #22c55e;
+}
+
+.match-recap--loss {
+  box-shadow: inset 4px 0 0 #ef4444;
+}
+
+.match-recap__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-recap__champion {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+}
+
+.match-recap__spells {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.match-recap__spell {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.match-recap__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.match-recap__queue {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.match-recap__duration,
+.match-recap__kda-ratio,
+.match-recap__cs {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.match-recap__result {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.match-recap__result--win {
+  color: #4ade80;
+}
+
+.match-recap__result--loss {
+  color: #f87171;
+}
+
+.match-recap__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.match-recap__kda-line {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.match-recap__build {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-recap__items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  grid-template-rows: repeat(2, 32px);
+  gap: 4px;
+}
+
+.match-recap__slot {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(75, 85, 99, 0.65);
+  background: rgba(31, 41, 55, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.match-recap__trinket-slot {
+  align-self: center;
+}
+
+.match-recap__item {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.match-recap__ovr {
+  justify-self: end;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #facc15;
+}
+
+@media (max-width: 960px) {
+  .match-recap {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .match-recap__ovr {
+    justify-self: start;
+  }
+}

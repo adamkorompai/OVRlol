@@ -23,7 +23,6 @@ public class KafkaOvrCardPublisher implements OvrCardPublisher {
     @Override
     public void publishCard(OvrCard card) {
         log.info("[KAFKA PUBLISHER] Expédition de la carte OVR finale pour le joueur {} sur le topic : {}", card.puuid(), topicName);
-        log.info("[ENGINE->KAFKA] matchId={} itemIds={}", card.matchId(), card.itemIds());
         kafkaTemplate.send(topicName, card.puuid(), card);
     }
 }

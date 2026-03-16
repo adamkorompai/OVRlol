@@ -43,6 +43,18 @@ public class PlayerCardEntity {
     private boolean win;
     private long gameDuration;
 
+    private int queueId;
+    private int summoner1Id;
+    private int summoner2Id;
+
+    private int item0;
+    private int item1;
+    private int item2;
+    private int item3;
+    private int item4;
+    private int item5;
+    private int item6;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     @Convert(converter = IntegerListJsonConverter.class)
     private List<Integer> itemIds;

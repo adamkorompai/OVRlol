@@ -57,36 +57,7 @@
 
         <div class="flex flex-col gap-3">
           @for (card of history(); track card.matchId) {
-            <article class="rounded-xl border border-gray-700 bg-gray-800/70 p-3 flex flex-wrap items-center gap-4">
-              <img [src]="championImg(card.championName)" [alt]="card.championName" class="h-14 w-14 rounded-md" />
-
-              <div class="min-w-[160px]">
-                <div class="font-semibold">{{ card.championName }}</div>
-                <div class="text-xs text-gray-400">
-                  {{ formatDuration(card.gameDuration) }} · {{ card.creepScore }} CS
-                </div>
-                <div [class]="card.win ? 'text-green-400 text-xs font-medium' : 'text-red-400 text-xs font-medium'">
-                  {{ card.win ? 'Victory' : 'Defeat' }}
-                </div>
-              </div>
-
-              <div class="min-w-[140px]">
-                <div class="font-bold">{{ card.kills }}/{{ card.deaths }}/{{ card.assists }}</div>
-                <div class="text-xs text-gray-400">KDA {{ kda(card) | number:'1.2-2' }}</div>
-              </div>
-
-              <div class="flex gap-1">
-                @for (itemId of card.itemIds; track itemId) {
-                  <img [src]="itemImg(itemId)" [alt]="'item-' + itemId" class="h-8 w-8 rounded border border-gray-700" />
-                }
-              </div>
-
-              <div class="flex gap-1">
-                @for (enemy of card.enemyChampions; track enemy) {
-                  <img [src]="championImg(enemy)" [alt]="enemy" class="h-7 w-7 rounded-full" />
-                }
-              </div>
-            </article>
+            <app-match-recap-row [card]="card" />
           }
         </div>
       </div>

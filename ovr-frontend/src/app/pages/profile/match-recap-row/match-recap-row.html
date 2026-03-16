@@ -1,0 +1,43 @@
+<article class="match-recap" [class.match-recap--win]="card.win" [class.match-recap--loss]="!card.win">
+  <div class="match-recap__left">
+    <img class="match-recap__champion" [src]="championImg(card.championName)" [alt]="card.championName" />
+    <div class="match-recap__spells">
+      <img class="match-recap__spell" [src]="spellImg(card.summoner1Id)" alt="Summoner spell 1" />
+      <img class="match-recap__spell" [src]="spellImg(card.summoner2Id)" alt="Summoner spell 2" />
+    </div>
+  </div>
+
+  <div class="match-recap__meta">
+    <div class="match-recap__queue">{{ queueLabel(card.queueId) }}</div>
+    <div class="match-recap__duration">{{ formatDuration(card.gameDuration) }}</div>
+    <div class="match-recap__result" [class.match-recap__result--win]="card.win" [class.match-recap__result--loss]="!card.win">
+      {{ card.win ? 'Victory' : 'Defeat' }}
+    </div>
+  </div>
+
+  <div class="match-recap__stats">
+    <div class="match-recap__kda-line">{{ card.kills }}/{{ card.deaths }}/{{ card.assists }}</div>
+    <div class="match-recap__kda-ratio">{{ kdaText() }} KDA</div>
+    <div class="match-recap__cs">{{ card.creepScore }} CS</div>
+  </div>
+
+  <div class="match-recap__build">
+    <div class="match-recap__items-grid">
+      @for (itemId of itemSlots(); track $index) {
+        <div class="match-recap__slot">
+          @if (itemId > 0) {
+            <img class="match-recap__item" [src]="itemImg(itemId)" [alt]="'item-' + itemId" />
+          }
+        </div>
+      }
+    </div>
+
+    <div class="match-recap__slot match-recap__trinket-slot">
+      @if (trinketSlot() > 0) {
+        <img class="match-recap__item" [src]="itemImg(trinketSlot())" [alt]="'item-' + trinketSlot()" />
+      }
+    </div>
+  </div>
+
+  <div class="match-recap__ovr">{{ card.overallRating }}</div>
+</article>

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class KafkaMatchPerformancePublisher implements MatchPerformancePublisher {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final MatchCompletedEventMapper eventMapper;
 
     @Value("${ovr.kafka.topic.match-completed}")
     private String topicName;
@@ -23,11 +24,7 @@ public class KafkaMatchPerformancePublisher implements MatchPerformancePublisher
     @Override
     public void publish(PlayerMatchPerformance performance) {
         log.info("[KAFKA ADAPTER] Publication de la performance sur le topic : {}", topicName);
-        log.info("[INGESTOR->KAFKA] matchId={} itemIds={} primaryRunes={} secondaryRunes={}",
-                performance.matchId(),
-                performance.itemsIds(),
-                performance.primaryRuneIds(),
-                performance.secondaryRuneIds());
-        kafkaTemplate.send(topicName, performance.matchId(), performance);
+        MatchCompletedEventPayload payload = eventMapper.toPayload(performance);
+        kafkaTemplate.send(topicName, performance.matchId(), payload);
     }
 }

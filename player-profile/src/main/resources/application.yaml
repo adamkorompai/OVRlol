@@ -30,7 +30,7 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
-        spring.json.value.default.type: lol.ovr.player_profile.infrastructure.adapter.in.kafka.KafkaOvrCardConsumer$OvrCardEventPayload
+        spring.json.value.default.type: lol.ovr.player_profile.infrastructure.adapter.in.kafka.OvrCardEventPayload
 
 ovr:
   kafka:

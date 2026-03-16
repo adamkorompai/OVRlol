@@ -15,6 +15,8 @@ public record RiotParticipantDto(
         int neutralMinionsKilled,
         int visionScore,
         boolean win,
+        int summoner1Id,
+        int summoner2Id,
         int item0,
         int item1,
         int item2,
