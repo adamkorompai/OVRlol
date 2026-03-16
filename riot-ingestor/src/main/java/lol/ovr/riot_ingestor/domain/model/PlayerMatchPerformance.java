@@ -14,7 +14,8 @@ public record PlayerMatchPerformance(
         SummonerSpells summonerSpells,
         ItemSlots items,
         RuneSetup runes,
-        List<String> enemyChampions
+    List<String> enemyChampions,
+    List<MatchParticipant> participants
 ) {
     public PlayerMatchPerformance {
         if (matchId == null || matchId.isBlank()) throw new IllegalArgumentException("matchId cannot be empty");

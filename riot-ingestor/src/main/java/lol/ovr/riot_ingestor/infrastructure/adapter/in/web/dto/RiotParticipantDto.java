@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record RiotParticipantDto(
         String puuid,
         String championName,
+        String riotIdGameName,
         int teamId,
         String teamPosition,
         int kills,

@@ -1,5 +1,6 @@
 package lol.ovr.riot_ingestor.infrastructure.adapter.out.kafka;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lol.ovr.riot_ingestor.domain.model.PlayerMatchPerformance;
@@ -8,6 +9,10 @@ import lol.ovr.riot_ingestor.domain.model.PlayerMatchPerformance;
 public class MatchCompletedEventMapper {
 
     public MatchCompletedEventPayload toPayload(PlayerMatchPerformance performance) {
+    List<MatchParticipantPayload> participants = performance.participants().stream()
+           .map(p -> new MatchParticipantPayload(p.summonerName(), p.championName(), p.teamPosition(), p.teamId()))
+           .toList();
+
         return new MatchCompletedEventPayload(
                 performance.matchId(),
                 performance.puuid(),
@@ -32,7 +37,8 @@ public class MatchCompletedEventMapper {
                 performance.items().item6(),
                 performance.runes().primaryRuneIds(),
                 performance.runes().secondaryRuneIds(),
-                performance.enemyChampions()
+           performance.enemyChampions(),
+           participants
         );
     }
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PlayerCard } from '../../../services/player';
+import { PlayerCard, TeamParticipant } from '../../../services/player';
 
 @Component({
   selector: 'app-match-recap-row',
@@ -72,6 +72,31 @@ export class MatchRecapRow {
     if (this.card.item6 !== undefined) return this.card.item6 ?? 0;
     return this.card.itemIds?.[6] ?? 0;
   }
+
+    private readonly POSITION_ORDER = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY'];
+
+    teamRows(): { position: string; team100: TeamParticipant | null; team200: TeamParticipant | null }[] {
+      const participants = this.card.participants ?? [];
+      const team100 = participants.filter(p => p.teamId === 100);
+      const team200 = participants.filter(p => p.teamId === 200);
+
+      return this.POSITION_ORDER.map(position => ({
+        position,
+        team100: team100.find(p => p.teamPosition === position) ?? null,
+        team200: team200.find(p => p.teamPosition === position) ?? null,
+      }));
+    }
+
+    positionLabel(position: string): string {
+      const labels: Record<string, string> = {
+        TOP: 'TOP',
+        JUNGLE: 'JGL',
+        MIDDLE: 'MID',
+        BOTTOM: 'ADC',
+        UTILITY: 'SUP',
+      };
+      return labels[position] ?? position;
+    }
 
   private spellKey(spellId: number): string {
     const map: Record<number, string> = {

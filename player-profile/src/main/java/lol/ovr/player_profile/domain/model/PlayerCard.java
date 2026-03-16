@@ -17,7 +17,8 @@ public record PlayerCard(
         ItemSlots items,
         List<Integer> itemIds,
         RuneSetup runes,
-        List<String> enemyChampions
+        List<String> enemyChampions,
+        List<MatchParticipant> participants
 ) {
         public PlayerCard {
                 if (puuid == null || puuid.isBlank()) throw new IllegalArgumentException("puuid cannot be empty");
@@ -29,5 +30,6 @@ public record PlayerCard(
                 if (runes == null) throw new IllegalArgumentException("runes cannot be null");
                 if (itemIds == null) itemIds = List.of();
                 if (enemyChampions == null) enemyChampions = List.of();
+                       if (participants == null) participants = List.of();
         }
 }

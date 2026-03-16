@@ -45,6 +45,7 @@ public class PlayerCardPersistenceMapper {
                 .primaryRuneIds(safe(card.runes().primaryRuneIds()))
                 .secondaryRuneIds(safe(card.runes().secondaryRuneIds()))
                 .enemyChampions(safe(card.enemyChampions()))
+                   .participants(safe(card.participants()))
                 .build();
     }
 
@@ -72,7 +73,8 @@ public class PlayerCardPersistenceMapper {
                 ),
                 safe(entity.getItemIds()),
                 new RuneSetup(safe(entity.getPrimaryRuneIds()), safe(entity.getSecondaryRuneIds())),
-                safe(entity.getEnemyChampions())
+                   safe(entity.getEnemyChampions()),
+                   safe(entity.getParticipants())
         );
     }
 

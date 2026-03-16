@@ -1,6 +1,6 @@
 .match-recap {
   display: grid;
-  grid-template-columns: 90px 130px 150px 1fr 64px;
+    grid-template-columns: 90px 130px 150px 1fr 220px 64px;
   gap: 14px;
   align-items: center;
   padding: 12px 14px;
@@ -134,3 +134,46 @@
     justify-self: start;
   }
 }
+
+  .match-recap__teams {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .match-recap__team-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .match-recap__team-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .match-recap__team-cell--right {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .match-recap__team-champ {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .match-recap__team-name {
+    font-size: 0.6rem;
+    line-height: 1;
+    color: #d1d5db;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+  }
+

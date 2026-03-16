@@ -30,7 +30,8 @@ public record OvrCard(
         List<Integer> itemIds,
         List<Integer> primaryRuneIds,
         List<Integer> secondaryRuneIds,
-        List<String> enemyChampions
+        List<String> enemyChampions,
+        List<MatchParticipant> participants
 ) {
     public OvrCard {
         if (overallRating < 0 || overallRating > 99) throw new IllegalArgumentException("L'OVR doit être entre 0 et 99");

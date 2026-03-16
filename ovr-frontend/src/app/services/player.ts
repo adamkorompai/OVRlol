@@ -3,6 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Client, Message } from '@stomp/stompjs';
 
+export interface TeamParticipant {
+  summonerName: string;
+  championName: string;
+  teamPosition: string;
+  teamId: number;
+}
+
 export interface PlayerCard {
   puuid: string;
   matchId: string;
@@ -36,6 +43,7 @@ export interface PlayerCard {
   primaryRuneIds: number[];
   secondaryRuneIds: number[];
   enemyChampions: string[];
+    participants: TeamParticipant[];
 }
 
 @Injectable({

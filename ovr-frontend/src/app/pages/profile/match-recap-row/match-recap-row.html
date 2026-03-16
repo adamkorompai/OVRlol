@@ -31,12 +31,30 @@
         </div>
       }
     </div>
-
     <div class="match-recap__slot match-recap__trinket-slot">
       @if (trinketSlot() > 0) {
         <img class="match-recap__item" [src]="itemImg(trinketSlot())" [alt]="'item-' + trinketSlot()" />
       }
     </div>
+  </div>
+
+  <div class="match-recap__teams">
+    @for (row of teamRows(); track row.position) {
+      <div class="match-recap__team-row">
+        <div class="match-recap__team-cell">
+          @if (row.team100) {
+            <img class="match-recap__team-champ" [src]="championImg(row.team100.championName)" [alt]="row.team100.championName" />
+            <span class="match-recap__team-name">{{ row.team100.summonerName }}</span>
+          }
+        </div>
+        <div class="match-recap__team-cell match-recap__team-cell--right">
+          @if (row.team200) {
+            <span class="match-recap__team-name">{{ row.team200.summonerName }}</span>
+            <img class="match-recap__team-champ" [src]="championImg(row.team200.championName)" [alt]="row.team200.championName" />
+          }
+        </div>
+      </div>
+    }
   </div>
 
   <div class="match-recap__ovr">{{ card.overallRating }}</div>

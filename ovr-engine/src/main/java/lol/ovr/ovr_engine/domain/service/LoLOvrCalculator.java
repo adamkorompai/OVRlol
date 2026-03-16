@@ -41,7 +41,7 @@ public class LoLOvrCalculator {
             input.items().item6(),
             itemIds,
             input.runes().primaryRuneIds(), input.runes().secondaryRuneIds(), input.enemyChampions()
-        );
+                   , input.participants());
     }
 
     private int calculateMechanics(int kills, int deaths, int assists) {

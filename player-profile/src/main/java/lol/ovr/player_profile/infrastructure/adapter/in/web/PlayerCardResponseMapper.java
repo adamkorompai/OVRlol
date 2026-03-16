@@ -10,6 +10,10 @@ import lol.ovr.player_profile.domain.model.PlayerCard;
 public class PlayerCardResponseMapper {
 
     public PlayerCardResponse toResponse(PlayerCard card) {
+    List<MatchParticipantResponse> participants = safe(card.participants()).stream()
+           .map(p -> new MatchParticipantResponse(p.summonerName(), p.championName(), p.teamPosition(), p.teamId()))
+           .toList();
+
         return new PlayerCardResponse(
                 card.puuid(),
                 card.matchId(),
@@ -38,7 +42,8 @@ public class PlayerCardResponseMapper {
                 safe(card.itemIds()),
                 safe(card.runes().primaryRuneIds()),
                 safe(card.runes().secondaryRuneIds()),
-                safe(card.enemyChampions())
+           safe(card.enemyChampions()),
+           participants
         );
     }
 

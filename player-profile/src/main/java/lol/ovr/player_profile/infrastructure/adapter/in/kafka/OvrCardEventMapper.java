@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import lol.ovr.player_profile.domain.model.ItemSlots;
 import lol.ovr.player_profile.domain.model.KdaStats;
 import lol.ovr.player_profile.domain.model.MatchContext;
+import lol.ovr.player_profile.domain.model.MatchParticipant;
 import lol.ovr.player_profile.domain.model.PlayerCard;
 import lol.ovr.player_profile.domain.model.RuneSetup;
 import lol.ovr.player_profile.domain.model.SummonerSpells;
@@ -15,6 +16,11 @@ import lol.ovr.player_profile.domain.model.SummonerSpells;
 public class OvrCardEventMapper {
 
     public PlayerCard toDomain(OvrCardEventPayload payload) {
+               List<MatchParticipant> participants = payload.participants() == null ? List.of() :
+                   payload.participants().stream()
+                       .map(p -> new MatchParticipant(p.summonerName(), p.championName(), p.teamPosition(), p.teamId()))
+                       .toList();
+
         return new PlayerCard(
                 payload.puuid(),
                 payload.matchId(),
@@ -38,7 +44,8 @@ public class OvrCardEventMapper {
                 ),
                 safeItems(payload),
                 new RuneSetup(safe(payload.primaryRuneIds()), safe(payload.secondaryRuneIds())),
-                safe(payload.enemyChampions())
+                   safe(payload.enemyChampions()),
+                   participants
         );
     }
 

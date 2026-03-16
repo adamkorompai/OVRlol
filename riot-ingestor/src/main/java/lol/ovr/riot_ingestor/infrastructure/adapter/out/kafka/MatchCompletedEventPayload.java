@@ -26,5 +26,6 @@ public record MatchCompletedEventPayload(
         int item6,
         List<Integer> primaryRuneIds,
         List<Integer> secondaryRuneIds,
-        List<String> enemyChampions
+        List<String> enemyChampions,
+        List<MatchParticipantPayload> participants
 ) {}

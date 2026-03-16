@@ -13,7 +13,8 @@ public record MatchPerformanceInput(
     SummonerSpells summonerSpells,
     ItemSlots items,
         RuneSetup runes,
-        List<String> enemyChampions
+    List<String> enemyChampions,
+    List<MatchParticipant> participants
 ) {
     public MatchPerformanceInput {
         if (matchId == null || matchId.isBlank()) throw new IllegalArgumentException("matchId cannot be empty");
@@ -24,5 +25,6 @@ public record MatchPerformanceInput(
         if (items == null) throw new IllegalArgumentException("items cannot be null");
         if (runes == null) throw new IllegalArgumentException("runes cannot be null");
         if (enemyChampions == null) enemyChampions = List.of();
+           if (participants == null) participants = List.of();
     }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.*;
 import lol.ovr.player_profile.infrastructure.adapter.out.persistence.converter.IntegerListJsonConverter;
 import lol.ovr.player_profile.infrastructure.adapter.out.persistence.converter.StringListJsonConverter;
+import lol.ovr.player_profile.infrastructure.adapter.out.persistence.converter.MatchParticipantListJsonConverter;
+import lol.ovr.player_profile.domain.model.MatchParticipant;
 
 @Entity
 @Table(name = "player_cards")
@@ -70,4 +72,8 @@ public class PlayerCardEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     @Convert(converter = StringListJsonConverter.class)
     private List<String> enemyChampions;
+
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = MatchParticipantListJsonConverter.class)
+    private List<MatchParticipant> participants;
 }

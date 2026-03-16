@@ -1,10 +1,12 @@
 package lol.ovr.ovr_engine.infrastructure.adapter.in.kafka;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lol.ovr.ovr_engine.domain.model.ItemSlots;
 import lol.ovr.ovr_engine.domain.model.KdaStats;
 import lol.ovr.ovr_engine.domain.model.MatchContext;
+import lol.ovr.ovr_engine.domain.model.MatchParticipant;
 import lol.ovr.ovr_engine.domain.model.MatchPerformanceInput;
 import lol.ovr.ovr_engine.domain.model.RuneSetup;
 import lol.ovr.ovr_engine.domain.model.SummonerSpells;
@@ -13,6 +15,11 @@ import lol.ovr.ovr_engine.domain.model.SummonerSpells;
 public class MatchCompletedEventMapper {
 
     public MatchPerformanceInput toDomain(MatchCompletedEventPayload event) {
+       List<MatchParticipant> participants = event.participants() == null ? List.of() :
+                   event.participants().stream()
+                       .map(p -> new MatchParticipant(p.summonerName(), p.championName(), p.teamPosition(), p.teamId()))
+                       .toList();
+
         return new MatchPerformanceInput(
                 event.matchId(),
                 event.puuid(),
@@ -32,7 +39,8 @@ public class MatchCompletedEventMapper {
                     event.item6()
                 ),
                 new RuneSetup(event.primaryRuneIds(), event.secondaryRuneIds()),
-                event.enemyChampions()
+                   event.enemyChampions(),
+                   participants
         );
     }
 }

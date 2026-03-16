@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import lol.ovr.riot_ingestor.domain.model.ItemSlots;
 import lol.ovr.riot_ingestor.domain.model.KdaStats;
 import lol.ovr.riot_ingestor.domain.model.MatchContext;
+import lol.ovr.riot_ingestor.domain.model.MatchParticipant;
 import lol.ovr.riot_ingestor.domain.model.PlayerMatchPerformance;
 import lol.ovr.riot_ingestor.domain.model.RuneSetup;
 import lol.ovr.riot_ingestor.domain.model.SummonerSpells;
@@ -34,6 +35,15 @@ public class RiotMatchPerformanceMapper {
                 .map(RiotParticipantDto::championName)
                 .toList();
 
+               List<MatchParticipant> participants = info.participants().stream()
+                       .map(p -> new MatchParticipant(
+                               p.riotIdGameName() != null ? p.riotIdGameName() : p.puuid(),
+                               p.championName(),
+                               p.teamPosition() != null ? p.teamPosition() : "",
+                               p.teamId()
+                       ))
+                       .toList();
+
         KdaStats kda = new KdaStats(me.kills(), me.deaths(), me.assists());
         MatchContext context = new MatchContext(me.win(), info.gameCreation(), info.gameDuration(), info.queueId());
         SummonerSpells summonerSpells = new SummonerSpells(me.summoner1Id(), me.summoner2Id());
@@ -59,7 +69,8 @@ public class RiotMatchPerformanceMapper {
                 summonerSpells,
                 items,
                 runes,
-                enemyChampions
+                       enemyChampions,
+                       participants
         );
     }
 
