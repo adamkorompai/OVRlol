@@ -1,0 +1,14 @@
+<header class="top-nav">
+  <a routerLink="/" class="brand">OVR.lol</a>
+
+  @if (!isHomeRoute()) {
+    <app-player-search
+      [compact]="true"
+      [showLabel]="false"
+      [buttonLabel]="'Search'"
+      [loadingLabel]="'...'"
+      [gamePlaceholder]="'Game Name'"
+      [tagPlaceholder]="'TAG'"
+    />
+  }
+</header>
